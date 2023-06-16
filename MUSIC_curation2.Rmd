@@ -1,6 +1,10 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
 ---
 
 ```{r setup}
@@ -22,19 +26,134 @@ datatable(q1)
 q2 <- xlsx::read.xlsx2(file = fname, 4, startRow = 3)
 datatable(q2)
 ```
+
+Count number of cases grouped by their highest MES score in the rectum
 ```{r}
-q3$MES_index <- as.numeric(q3$MES_index)
-q1$MES_Rectum <- as.numeric(q1$MES_Rectum)
+q2[1,3] <- sum(q1$MES_Rectum == 0)
+q2[2,3] <- sum(q1$MES_Rectum == 1)
+q2[3,3] <- sum(q1$MES_Rectum == 2)
+q2[4,3] <- sum(q1$MES_Rectum == 3)
+
+```
+
+Proportion of biopsies with histologic score based on maximum NHI at AC
+```{r}
+q2[1,4] <- sum((q1$NHI_max_AC == 0) & (q1$MES_Rectum == 0))
+q2[2,4] <- sum((q1$NHI_max_AC == 0) & (q1$MES_Rectum == 1))
+q2[3,4] <- sum((q1$NHI_max_AC == 0) & (q1$MES_Rectum == 2))
+q2[4,4] <- sum((q1$NHI_max_AC == 0) & (q1$MES_Rectum == 3))
+
+q2[1,5] <- sum((q1$NHI_max_AC == 1) & (q1$MES_Rectum == 0))
+q2[2,5] <- sum((q1$NHI_max_AC == 1) & (q1$MES_Rectum == 1))
+q2[3,5] <- sum((q1$NHI_max_AC == 1) & (q1$MES_Rectum == 2))
+q2[4,5] <- sum((q1$NHI_max_AC == 1) & (q1$MES_Rectum == 3))
+
+q2[1,6] <- sum((q1$NHI_max_AC == 2) & (q1$MES_Rectum == 0))
+q2[2,6] <- sum((q1$NHI_max_AC == 2) & (q1$MES_Rectum == 1))
+q2[3,6] <- sum((q1$NHI_max_AC == 2) & (q1$MES_Rectum == 2))
+q2[4,6] <- sum((q1$NHI_max_AC == 2) & (q1$MES_Rectum == 3))
+
+q2[1,7] <- sum((q1$NHI_max_AC == 3) & (q1$MES_Rectum == 0))
+q2[2,7] <- sum((q1$NHI_max_AC == 3) & (q1$MES_Rectum == 1))
+q2[3,7] <- sum((q1$NHI_max_AC == 3) & (q1$MES_Rectum == 2))
+q2[4,7] <- sum((q1$NHI_max_AC == 3) & (q1$MES_Rectum == 3))
+
+q2[1,8] <- sum((q1$NHI_max_AC == 4) & (q1$MES_Rectum == 0))
+q2[2,8] <- sum((q1$NHI_max_AC == 4) & (q1$MES_Rectum == 1))
+q2[3,8] <- sum((q1$NHI_max_AC == 4) & (q1$MES_Rectum == 2))
+q2[4,8] <- sum((q1$NHI_max_AC == 4) & (q1$MES_Rectum == 3))
+```
+
+Proportion of biopsies with histologic score based on maximum NHI at TC
+```{r}
+q2[1,9] <- sum((q1$NHI_max_TC == 0) & (q1$MES_Rectum == 0))
+q2[2,9] <- sum((q1$NHI_max_TC == 0) & (q1$MES_Rectum == 1))
+q2[3,9] <- sum((q1$NHI_max_TC == 0) & (q1$MES_Rectum == 2))
+q2[4,9] <- sum((q1$NHI_max_TC == 0) & (q1$MES_Rectum == 3))
+
+q2[1,10] <- sum((q1$NHI_max_TC == 1) & (q1$MES_Rectum == 0))
+q2[2,10] <- sum((q1$NHI_max_TC == 1) & (q1$MES_Rectum == 1))
+q2[3,10] <- sum((q1$NHI_max_TC == 1) & (q1$MES_Rectum == 2))
+q2[4,10] <- sum((q1$NHI_max_TC == 1) & (q1$MES_Rectum == 3))
+
+q2[1,11] <- sum((q1$NHI_max_TC == 2) & (q1$MES_Rectum == 0))
+q2[2,11] <- sum((q1$NHI_max_TC == 2) & (q1$MES_Rectum == 1))
+q2[3,11] <- sum((q1$NHI_max_TC == 2) & (q1$MES_Rectum == 2))
+q2[4,11] <- sum((q1$NHI_max_TC == 2) & (q1$MES_Rectum == 3))
+
+q2[1,12] <- sum((q1$NHI_max_TC == 3) & (q1$MES_Rectum == 0))
+q2[2,12] <- sum((q1$NHI_max_TC == 3) & (q1$MES_Rectum == 1))
+q2[3,12] <- sum((q1$NHI_max_TC == 3) & (q1$MES_Rectum == 2))
+q2[4,12] <- sum((q1$NHI_max_TC == 3) & (q1$MES_Rectum == 3))
+
+q2[1,13] <- sum((q1$NHI_max_TC == 4) & (q1$MES_Rectum == 0))
+q2[2,13] <- sum((q1$NHI_max_TC == 4) & (q1$MES_Rectum == 1))
+q2[3,13] <- sum((q1$NHI_max_TC == 4) & (q1$MES_Rectum == 2))
+q2[4,13] <- sum((q1$NHI_max_TC == 4) & (q1$MES_Rectum == 3))
+```
+
+Proportion of biopsies with histologic score based on maximum NHI at DC
+```{r}
+q2[1,14] <- sum((q1$NHI_max_DC == 0) & (q1$MES_Rectum == 0))
+q2[2,14] <- sum((q1$NHI_max_DC == 0) & (q1$MES_Rectum == 1))
+q2[3,14] <- sum((q1$NHI_max_DC == 0) & (q1$MES_Rectum == 2))
+q2[4,14] <- sum((q1$NHI_max_DC == 0) & (q1$MES_Rectum == 3))
+
+q2[1,15] <- sum((q1$NHI_max_DC == 1) & (q1$MES_Rectum == 0))
+q2[2,15] <- sum((q1$NHI_max_DC == 1) & (q1$MES_Rectum == 1))
+q2[3,15] <- sum((q1$NHI_max_DC == 1) & (q1$MES_Rectum == 2))
+q2[4,15] <- sum((q1$NHI_max_DC == 1) & (q1$MES_Rectum == 3))
+
+q2[1,16] <- sum((q1$NHI_max_DC == 2) & (q1$MES_Rectum == 0))
+q2[2,16] <- sum((q1$NHI_max_DC == 2) & (q1$MES_Rectum == 1))
+q2[3,16] <- sum((q1$NHI_max_DC == 2) & (q1$MES_Rectum == 2))
+q2[4,16] <- sum((q1$NHI_max_DC == 2) & (q1$MES_Rectum == 3))
+
+q2[1,17] <- sum((q1$NHI_max_DC == 3) & (q1$MES_Rectum == 0))
+q2[2,17] <- sum((q1$NHI_max_DC == 3) & (q1$MES_Rectum == 1))
+q2[3,17] <- sum((q1$NHI_max_DC == 3) & (q1$MES_Rectum == 2))
+q2[4,17] <- sum((q1$NHI_max_DC == 3) & (q1$MES_Rectum == 3))
+
+q2[1,18] <- sum((q1$NHI_max_DC == 4) & (q1$MES_Rectum == 0))
+q2[2,18] <- sum((q1$NHI_max_DC == 4) & (q1$MES_Rectum == 1))
+q2[3,18] <- sum((q1$NHI_max_DC == 4) & (q1$MES_Rectum == 2))
+q2[4,18] <- sum((q1$NHI_max_DC == 4) & (q1$MES_Rectum == 3))
+```
+
+Proportion of biopsies with histologic score based on maximum NHI at RE
+```{r}
+q2[1,19] <- sum((q1$NHI_max_RE == 0) & (q1$MES_Rectum == 0))
+q2[2,19] <- sum((q1$NHI_max_RE == 0) & (q1$MES_Rectum == 1))
+q2[3,19] <- sum((q1$NHI_max_RE == 0) & (q1$MES_Rectum == 2))
+q2[4,19] <- sum((q1$NHI_max_RE == 0) & (q1$MES_Rectum == 3))
+
+q2[1,20] <- sum((q1$NHI_max_RE == 1) & (q1$MES_Rectum == 0))
+q2[2,20] <- sum((q1$NHI_max_RE == 1) & (q1$MES_Rectum == 1))
+q2[3,20] <- sum((q1$NHI_max_RE == 1) & (q1$MES_Rectum == 2))
+q2[4,20] <- sum((q1$NHI_max_RE == 1) & (q1$MES_Rectum == 3))
+
+q2[1,21] <- sum((q1$NHI_max_RE == 2) & (q1$MES_Rectum == 0))
+q2[2,21] <- sum((q1$NHI_max_RE == 2) & (q1$MES_Rectum == 1))
+q2[3,21] <- sum((q1$NHI_max_RE == 2) & (q1$MES_Rectum == 2))
+q2[4,21] <- sum((q1$NHI_max_RE == 2) & (q1$MES_Rectum == 3))
+
+q2[1,22] <- sum((q1$NHI_max_RE == 3) & (q1$MES_Rectum == 0))
+q2[2,22] <- sum((q1$NHI_max_RE == 3) & (q1$MES_Rectum == 1))
+q2[3,22] <- sum((q1$NHI_max_RE == 3) & (q1$MES_Rectum == 2))
+q2[4,22] <- sum((q1$NHI_max_RE == 3) & (q1$MES_Rectum == 3))
+
+q2[1,23] <- sum((q1$NHI_max_RE == 4) & (q1$MES_Rectum == 0))
+q2[2,23] <- sum((q1$NHI_max_RE == 4) & (q1$MES_Rectum == 1))
+q2[3,23] <- sum((q1$NHI_max_RE == 4) & (q1$MES_Rectum == 2))
+q2[4,23] <- sum((q1$NHI_max_RE == 4) & (q1$MES_Rectum == 3))
+```
+
+```{r}
+datatable(q2)
 ```
 
 
 ```{r}
-q3 <- q2 |>
-  select(location, MES_index)
-```
-
-```{r}
-q3 |> 
-  mutate(sum(q1$MES_Rectum == MES_index))
+#write.xlsx2(q2, fname, sheetName = "R calc", append = TRUE)
 ```
 
