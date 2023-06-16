@@ -23,6 +23,18 @@ q2 <- xlsx::read.xlsx2(file = fname, 4, startRow = 3)
 datatable(q2)
 ```
 ```{r}
-
-  daa
+q3$MES_index <- as.numeric(q3$MES_index)
+q1$MES_Rectum <- as.numeric(q1$MES_Rectum)
 ```
+
+
+```{r}
+q3 <- q2 |>
+  select(location, MES_index)
+```
+
+```{r}
+q3 |> 
+  mutate(sum(q1$MES_Rectum == MES_index))
+```
+
