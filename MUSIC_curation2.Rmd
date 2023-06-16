@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r setup}
+library(tidyverse)
+library(xlsx)
+library(DT)
+```
+
+# Import data from study database .xlsx file
+
+```{r, import xlsx file}
+fname <- "FNIH prospective study database excluding follow-up exams.xlsx"
+```
+
+```{r}
+q1 <- xlsx::read.xlsx2(file = fname, 2, startRow = 3, endRow = 169)
+datatable(q1)
+ 
+q2 <- xlsx::read.xlsx2(file = fname, 4, startRow = 3)
+datatable(q2)
+```
+```{r}
+
+  
+```
