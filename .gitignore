@@ -48,8 +48,8 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
-.xlsx
-.csv
+*.xlsx
+*.csv
 .Rproj.user
 .Rdata
 .DS_Store
