@@ -154,6 +154,6 @@ datatable(q2)
 
 
 ```{r}
-#write.xlsx2(q2, fname, sheetName = "R calc", append = TRUE)
+# write.xlsx2(q2, fname, sheetName = "R calc", append = TRUE)
 ```
 
