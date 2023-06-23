@@ -11,6 +11,10 @@ output:
 library(tidyverse)
 library(xlsx)
 library(DT)
+library(gt)
+library(glue)
+library(htmlwidgets)
+library(webshot2)
 ```
 
 # Import data from study database .xlsx file
@@ -149,11 +153,274 @@ q2[4,23] <- sum((q1$NHI_max_RE == 4) & (q1$MES_Rectum == 3))
 ```
 
 ```{r}
-datatable(q2)
+gt(q2)
 ```
 
 
 ```{r}
 # write.xlsx2(q2, fname, sheetName = "R calc", append = TRUE)
+```
+
+# Max NHI in Rectum vs Max NHI
+```{r}
+df_NHI <- read.xlsx2(fname, sheetName = "NHI_vs_NHI")
+df_NHI <- df_NHI |> 
+  mutate(
+    across(3:32, as.integer)
+  )
+```
+
+```{r}
+df_NHI[1,3] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_AC == 0))
+df_NHI[1,4] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_AC == 1))
+df_NHI[1,5] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_AC == 2))
+df_NHI[1,6] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_AC == 3))
+df_NHI[1,7] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_AC == 4))
+
+df_NHI[2,3] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 0))
+df_NHI[2,4] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 1))
+df_NHI[2,5] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 2))
+df_NHI[2,6] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 3))
+df_NHI[2,7] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 4))
+
+df_NHI[3,3] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 0))
+df_NHI[3,4] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 1))
+df_NHI[3,5] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 2))
+df_NHI[3,6] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 3))
+df_NHI[3,7] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 4))
+```
+
+```{r}
+df_NHI[1,8] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_TC == 0))
+df_NHI[1,9] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_TC == 1))
+df_NHI[1,10] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_TC == 2))
+df_NHI[1,11] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_TC == 3))
+df_NHI[1,12] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_TC == 4))
+
+df_NHI[2,8] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 0))
+df_NHI[2,9] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 1))
+df_NHI[2,10] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 2))
+df_NHI[2,11] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 3))
+df_NHI[2,12] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 4))
+
+df_NHI[3,8] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 0))
+df_NHI[3,9] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 1))
+df_NHI[3,10] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 2))
+df_NHI[3,11] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 3))
+df_NHI[3,12] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 4))
+```
+
+```{r}
+df_NHI[1,13] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0))
+df_NHI[1,14] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 1))
+df_NHI[1,15] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 2))
+df_NHI[1,16] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 3))
+df_NHI[1,17] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 4))
+
+df_NHI[2,13] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_DC == 0))
+df_NHI[2,14] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_DC == 1))
+df_NHI[2,15] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_DC == 2))
+df_NHI[2,16] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_DC == 3))
+df_NHI[2,17] <- sum((q1$NHI_max_RE == 1) & (q1$NHI_max_DC == 4))
+
+df_NHI[3,13] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_DC == 0))
+df_NHI[3,14] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_DC == 1))
+df_NHI[3,15] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_DC == 2))
+df_NHI[3,16] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_DC == 3))
+df_NHI[3,17] <- sum((q1$NHI_max_RE > 1) & (q1$NHI_max_DC == 4))
+```
+
+```{r}
+df_NHI <- df_NHI |> 
+  rowwise() |> 
+  mutate(percent_max_ac_nhi_0 = max_ac_nhi_0 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
+  mutate(percent_max_ac_nhi_1 = max_ac_nhi_1 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
+  mutate(percent_max_ac_nhi_2 = max_ac_nhi_2 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
+  mutate(percent_max_ac_nhi_3 = max_ac_nhi_3 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
+  mutate(percent_max_ac_nhi_4 = max_ac_nhi_4 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4))
+```
+
+```{r}
+df_NHI <- df_NHI |> 
+  rowwise() |> 
+  mutate(percent_max_tc_nhi_0 = max_tc_nhi_0 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
+  mutate(percent_max_tc_nhi_1 = max_tc_nhi_1 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
+  mutate(percent_max_tc_nhi_2 = max_tc_nhi_2 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
+  mutate(percent_max_tc_nhi_3 = max_tc_nhi_3 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
+  mutate(percent_max_tc_nhi_4 = max_tc_nhi_4 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4))
+```
+
+```{r}
+df_NHI <- df_NHI |> 
+  rowwise() |> 
+  mutate(percent_max_dc_nhi_0 = max_dc_nhi_0 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
+  mutate(percent_max_dc_nhi_1 = max_dc_nhi_1 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
+  mutate(percent_max_dc_nhi_2 = max_dc_nhi_2 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
+  mutate(percent_max_dc_nhi_3 = max_dc_nhi_3 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
+  mutate(percent_max_dc_nhi_4 = max_dc_nhi_4 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4))
+```
+
+# NHI rectum vs AC
+```{r}
+NHI_rec_ac_per <- df_NHI |> 
+  select(location, nhi_index, percent_max_ac_nhi_0:percent_max_ac_nhi_4) |> 
+  gt() |> 
+  fmt_percent() |> 
+  tab_header(
+    title = md("**Max NHI in Ascending Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Ascending Colon",
+    columns = starts_with("percent")
+  ) |> 
+  cols_label(
+    percent_max_ac_nhi_0 = 0,
+    percent_max_ac_nhi_1 = 1,
+    percent_max_ac_nhi_2 = 2,
+    percent_max_ac_nhi_3 = 3,
+    percent_max_ac_nhi_4 = 4,
+    nhi_index = "NHI"
+  ) |> 
+  data_color(
+    columns = 3:7,
+    method = "numeric",
+    palette = c("white", "green"),
+    domain = c(0,1)
+  )
+
+NHI_rec_ac <- df_NHI |> 
+  select(location, nhi_index, max_ac_nhi_0:max_ac_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Ascending Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Ascending Colon",
+    columns = starts_with("max")
+  ) |> 
+  cols_label(
+    max_ac_nhi_0 = 0,
+    max_ac_nhi_1 = 1,
+    max_ac_nhi_2 = 2,
+    max_ac_nhi_3 = 3,
+    max_ac_nhi_4 = 4,
+    nhi_index = "NHI"
+  )
+```
+
+# NHI rectum vs TC
+```{r}
+NHI_rec_tc_per <- df_NHI |> 
+  select(location, nhi_index, percent_max_tc_nhi_0:percent_max_tc_nhi_4) |> 
+  gt() |> 
+  fmt_percent() |> 
+  tab_header(
+    title = md("**Max NHI in Transvere Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Transverse Colon",
+    columns = starts_with("percent")
+  ) |> 
+  cols_label(
+    percent_max_tc_nhi_0 = 0,
+    percent_max_tc_nhi_1 = 1,
+    percent_max_tc_nhi_2 = 2,
+    percent_max_tc_nhi_3 = 3,
+    percent_max_tc_nhi_4 = 4,
+    nhi_index = "NHI"
+  ) |> 
+  data_color(
+    columns = 3:7,
+    method = "numeric",
+    palette = c("white", "green"),
+    domain = c(0,1)
+  )
+
+NHI_rec_tc <- df_NHI |> 
+  select(location, nhi_index, max_tc_nhi_0:max_tc_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Transverse Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Transverse Colon",
+    columns = starts_with("max")
+  ) |> 
+  cols_label(
+    max_tc_nhi_0 = 0,
+    max_tc_nhi_1 = 1,
+    max_tc_nhi_2 = 2,
+    max_tc_nhi_3 = 3,
+    max_tc_nhi_4 = 4,
+    nhi_index = "NHI"
+  )
+```
+
+# NHI rectum vs DC
+```{r}
+NHI_rec_dc_per <- df_NHI |> 
+  select(location, nhi_index, percent_max_dc_nhi_0:percent_max_dc_nhi_4) |> 
+  gt() |> 
+  fmt_percent() |> 
+  tab_header(
+    title = md("**Max NHI in Descending Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Descending Colon",
+    columns = starts_with("percent")
+  ) |> 
+  cols_label(
+    percent_max_dc_nhi_0 = 0,
+    percent_max_dc_nhi_1 = 1,
+    percent_max_dc_nhi_2 = 2,
+    percent_max_dc_nhi_3 = 3,
+    percent_max_dc_nhi_4 = 4,
+    nhi_index = "NHI"
+  ) |> 
+  data_color(
+    columns = 3:7,
+    method = "numeric",
+    palette = c("white", "green"),
+    domain = c(0,1)
+  )
+
+NHI_rec_dc <- df_NHI |> 
+  select(location, nhi_index, max_dc_nhi_0:max_dc_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Descending Colon vs Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Descending Colon",
+    columns = starts_with("max")
+  ) |> 
+  cols_label(
+    max_dc_nhi_0 = 0,
+    max_dc_nhi_1 = 1,
+    max_dc_nhi_2 = 2,
+    max_dc_nhi_3 = 3,
+    max_dc_nhi_4 = 4,
+    nhi_index = "NHI"
+  )
+```
+
+```{r}
+NHI_rec_ac_per |> 
+  gtsave(filename = "AC_per.png")
+
+NHI_rec_ac |> 
+  gtsave(filename = "AC_num.png")
+
+NHI_rec_tc_per |> 
+  gtsave(filename = "tc_per.png")
+
+NHI_rec_tc |> 
+  gtsave(filename = "tc_num.png")
+
+NHI_rec_dc_per |> 
+  gtsave(filename = "dc_per.png")
+
+NHI_rec_dc |> 
+  gtsave(filename = "dc_num.png")
 ```
 
