@@ -126,13 +126,34 @@ df_NHI_re <- df_NHI_re |>
   mutate(percent_max_dc_nhi_4 = max_dc_nhi_4 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4))
 ```
 
+```{r}
+df_NHI_re <- df_NHI_re |> 
+  mutate(max_ac_nhi_0_f = paste0(format(round(percent_max_ac_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_0, ")")) |> 
+  mutate(max_ac_nhi_1_f = paste0(format(round(percent_max_ac_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_1, ")")) |> 
+  mutate(max_ac_nhi_2_f = paste0(format(round(percent_max_ac_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_2, ")")) |> 
+  mutate(max_ac_nhi_3_f = paste0(format(round(percent_max_ac_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_3, ")")) |> 
+  mutate(max_ac_nhi_4_f = paste0(format(round(percent_max_ac_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_4, ")")) |> 
+  mutate(max_tc_nhi_0_f = paste0(format(round(percent_max_tc_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_0, ")")) |> 
+  mutate(max_tc_nhi_1_f = paste0(format(round(percent_max_tc_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_1, ")")) |> 
+  mutate(max_tc_nhi_2_f = paste0(format(round(percent_max_tc_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_2, ")")) |> 
+  mutate(max_tc_nhi_3_f = paste0(format(round(percent_max_tc_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_3, ")")) |> 
+  mutate(max_tc_nhi_4_f = paste0(format(round(percent_max_tc_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_4, ")")) |> 
+  mutate(max_dc_nhi_0_f = paste0(format(round(percent_max_dc_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_0, ")")) |> 
+  mutate(max_dc_nhi_1_f = paste0(format(round(percent_max_dc_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_1, ")")) |> 
+  mutate(max_dc_nhi_2_f = paste0(format(round(percent_max_dc_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_2, ")")) |> 
+  mutate(max_dc_nhi_3_f = paste0(format(round(percent_max_dc_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_3, ")")) |> 
+  mutate(max_dc_nhi_4_f = paste0(format(round(percent_max_dc_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_4, ")"))
+```
+
 ## NHI rectum vs AC
 
 ```{r}
 NHI_rec_ac_per <- df_NHI_re |> 
   select(location, nhi_index, percent_max_ac_nhi_0:percent_max_ac_nhi_4) |> 
   gt() |> 
-  fmt_percent() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
   tab_header(
     title = md("**Max NHI in Ascending Colon vs Rectum**")
   ) |> 
@@ -147,12 +168,12 @@ NHI_rec_ac_per <- df_NHI_re |>
     percent_max_ac_nhi_3 = 3,
     percent_max_ac_nhi_4 = 4,
     nhi_index = "NHI"
-  ) |> 
-  data_color(
-    columns = 3:7,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
   )
 
 NHI_rec_ac <- df_NHI_re |> 
@@ -181,7 +202,9 @@ NHI_rec_ac <- df_NHI_re |>
 NHI_rec_tc_per <- df_NHI_re |> 
   select(location, nhi_index, percent_max_tc_nhi_0:percent_max_tc_nhi_4) |> 
   gt() |> 
-  fmt_percent() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
   tab_header(
     title = md("**Max NHI in Transvere Colon vs Rectum**")
   ) |> 
@@ -196,12 +219,12 @@ NHI_rec_tc_per <- df_NHI_re |>
     percent_max_tc_nhi_3 = 3,
     percent_max_tc_nhi_4 = 4,
     nhi_index = "NHI"
-  ) |> 
-  data_color(
-    columns = 3:7,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
   )
 
 NHI_rec_tc <- df_NHI_re |> 
@@ -230,7 +253,9 @@ NHI_rec_tc <- df_NHI_re |>
 NHI_rec_dc_per <- df_NHI_re |> 
   select(location, nhi_index, percent_max_dc_nhi_0:percent_max_dc_nhi_4) |> 
   gt() |> 
-  fmt_percent() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
   tab_header(
     title = md("**Max NHI in Descending Colon vs Rectum**")
   ) |> 
@@ -245,12 +270,12 @@ NHI_rec_dc_per <- df_NHI_re |>
     percent_max_dc_nhi_3 = 3,
     percent_max_dc_nhi_4 = 4,
     nhi_index = "NHI"
-  ) |> 
-  data_color(
-    columns = 3:7,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
   )
 
 NHI_rec_dc <- df_NHI_re |> 
@@ -275,22 +300,22 @@ NHI_rec_dc <- df_NHI_re |>
 
 ```{r, eval= FALSE}
 NHI_rec_ac_per |> 
-  gtsave(filename = "ac_per.png")
+  gtsave(filename = "output_tables/ac_per.png")
 
 NHI_rec_ac |> 
-  gtsave(filename = "ac_num.png")
+  gtsave(filename = "output_tables/ac_num.png")
 
 NHI_rec_tc_per |> 
-  gtsave(filename = "tc_per.png")
+  gtsave(filename = "output_tables/tc_per.png")
 
 NHI_rec_tc |> 
-  gtsave(filename = "tc_num.png")
+  gtsave(filename = "output_tables/tc_num.png")
 
 NHI_rec_dc_per |> 
-  gtsave(filename = "dc_per.png")
+  gtsave(filename = "output_tables/dc_per.png")
 
 NHI_rec_dc |> 
-  gtsave(filename = "dc_num.png")
+  gtsave(filename = "output_tables/dc_num.png")
 ```
 
 ```{r}
@@ -298,6 +323,65 @@ NHI_rec_ac_per
 NHI_rec_tc_per
 NHI_rec_dc_per
 ```
+
+```{r}
+NHI_r_atd_per <- df_NHI_re |> 
+  select(location, nhi_index, max_ac_nhi_0_f:max_ac_nhi_4_f, max_tc_nhi_0_f:max_tc_nhi_4_f, max_dc_nhi_0_f:max_dc_nhi_4_f, percent_max_ac_nhi_0:percent_max_ac_nhi_4, percent_max_tc_nhi_0:percent_max_tc_nhi_4, percent_max_dc_nhi_0:percent_max_dc_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI vs Rectum and Descending Colon**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Ascending Colon",
+    columns = contains("ac_nhi")
+  ) |> 
+   tab_spanner(
+    label = "Max NHI in Transverse Colon",
+    columns = contains("tc_nhi")
+  ) |>
+     tab_spanner(
+    label = "Max NHI in Descending Colon",
+    columns = contains("dc_nhi")
+  ) |>
+  cols_label(
+    max_ac_nhi_0_f = 0,
+    max_ac_nhi_1_f = 1,
+    max_ac_nhi_2_f = 2,
+    max_ac_nhi_3_f = 3,
+    max_ac_nhi_4_f = 4,
+    max_tc_nhi_0_f = 0,
+    max_tc_nhi_1_f = 1,
+    max_tc_nhi_2_f = 2,
+    max_tc_nhi_3_f = 3,
+    max_tc_nhi_4_f = 4,
+    max_dc_nhi_0_f = 0,
+    max_dc_nhi_1_f = 1,
+    max_dc_nhi_2_f = 2,
+    max_dc_nhi_3_f = 3,
+    max_dc_nhi_4_f = 4,
+    nhi_index = "Max NHI"
+  ) |> 
+#  data_color(
+#    columns = 13:22,
+#    direction = "column",
+#    target_columns = 3:12,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+#  ) |> 
+  cols_hide(starts_with("percent"))
+```
+
+```{r}
+NHI_r_atd_per
+```
+
+```{r, echo=FALSE}
+NHI_r_atd_per |> 
+  gtsave(filename = "output_tables/nhi_r_atd.png")
+```
+
+
 
 # Max NHI in Rectum + DC vs Max NHI in AC, TC
 ```{r}
@@ -343,11 +427,11 @@ df_NHI_re_dc[1,10] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_
 df_NHI_re_dc[1,11] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_max_TC == 3))
 df_NHI_re_dc[1,12] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_max_TC == 4))
 
-df_NHI_re_dc[2,8] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 0)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 0)))
-df_NHI_re_dc[2,9] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 1)))
-df_NHI_re_dc[2,10] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 2)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 2)))
-df_NHI_re_dc[2,11] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 3)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 3)))
-df_NHI_re_dc[2,12] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 4)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 4)))
+df_NHI_re_dc[2,8] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 0) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 0) & (q1$NHI_max_RE <= 1)))
+df_NHI_re_dc[2,9] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 1) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 1) & (q1$NHI_max_RE <= 1)))
+df_NHI_re_dc[2,10] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 2) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 2) & (q1$NHI_max_RE <= 1)))
+df_NHI_re_dc[2,11] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 3) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 3) & (q1$NHI_max_RE <= 1)))
+df_NHI_re_dc[2,12] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_TC == 4) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_TC == 4) & (q1$NHI_max_RE <= 1)))
 
 df_NHI_re_dc[3,8] <- sum(((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 0)) | ((q1$NHI_max_DC > 1) & (q1$NHI_max_TC == 0)))
 df_NHI_re_dc[3,9] <- sum(((q1$NHI_max_RE > 1) & (q1$NHI_max_TC == 1)) | ((q1$NHI_max_DC > 1) & (q1$NHI_max_TC == 1)))
@@ -376,16 +460,16 @@ df_NHI_re_dc <- df_NHI_re_dc |>
 
 ```{r}
 df_NHI_re_dc <- df_NHI_re_dc |> 
-  mutate(max_ac_nhi_0_f = paste0(format(round(percent_max_ac_nhi_0 * 100, 2), nsmall = 2), "% (", max_ac_nhi_0, ")")) |> 
-  mutate(max_ac_nhi_1_f = paste0(format(round(percent_max_ac_nhi_1 * 100, 2), nsmall = 2), "% (", max_ac_nhi_1, ")")) |> 
-  mutate(max_ac_nhi_2_f = paste0(format(round(percent_max_ac_nhi_2 * 100, 2), nsmall = 2), "% (", max_ac_nhi_2, ")")) |> 
-  mutate(max_ac_nhi_3_f = paste0(format(round(percent_max_ac_nhi_3 * 100, 2), nsmall = 2), "% (", max_ac_nhi_3, ")")) |> 
-  mutate(max_ac_nhi_4_f = paste0(format(round(percent_max_ac_nhi_4 * 100, 2), nsmall = 2), "% (", max_ac_nhi_4, ")")) |> 
-  mutate(max_tc_nhi_0_f = paste0(format(round(percent_max_tc_nhi_0 * 100, 2), nsmall = 2), "% (", max_tc_nhi_0, ")")) |> 
-  mutate(max_tc_nhi_1_f = paste0(format(round(percent_max_tc_nhi_1 * 100, 2), nsmall = 2), "% (", max_tc_nhi_1, ")")) |> 
-  mutate(max_tc_nhi_2_f = paste0(format(round(percent_max_tc_nhi_2 * 100, 2), nsmall = 2), "% (", max_tc_nhi_2, ")")) |> 
-  mutate(max_tc_nhi_3_f = paste0(format(round(percent_max_tc_nhi_3 * 100, 2), nsmall = 2), "% (", max_tc_nhi_3, ")")) |> 
-  mutate(max_tc_nhi_4_f = paste0(format(round(percent_max_tc_nhi_4 * 100, 2), nsmall = 2), "% (", max_tc_nhi_4, ")")) 
+  mutate(max_ac_nhi_0_f = paste0(format(round(percent_max_ac_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_0, ")")) |> 
+  mutate(max_ac_nhi_1_f = paste0(format(round(percent_max_ac_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_1, ")")) |> 
+  mutate(max_ac_nhi_2_f = paste0(format(round(percent_max_ac_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_2, ")")) |> 
+  mutate(max_ac_nhi_3_f = paste0(format(round(percent_max_ac_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_3, ")")) |> 
+  mutate(max_ac_nhi_4_f = paste0(format(round(percent_max_ac_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_4, ")")) |> 
+  mutate(max_tc_nhi_0_f = paste0(format(round(percent_max_tc_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_0, ")")) |> 
+  mutate(max_tc_nhi_1_f = paste0(format(round(percent_max_tc_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_1, ")")) |> 
+  mutate(max_tc_nhi_2_f = paste0(format(round(percent_max_tc_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_2, ")")) |> 
+  mutate(max_tc_nhi_3_f = paste0(format(round(percent_max_tc_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_3, ")")) |> 
+  mutate(max_tc_nhi_4_f = paste0(format(round(percent_max_tc_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_4, ")")) 
 ```
 
 ## NHI rectum + DC vs AC
@@ -394,7 +478,9 @@ df_NHI_re_dc <- df_NHI_re_dc |>
 NHI_rd_ac_per <- df_NHI_re_dc |> 
   select(location, nhi_index, percent_max_ac_nhi_0:percent_max_ac_nhi_4) |> 
   gt() |> 
-  fmt_percent() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
   tab_header(
     title = md("**Max NHI in Ascending Colon vs Rectum and Descending Colon**")
   ) |> 
@@ -409,12 +495,12 @@ NHI_rd_ac_per <- df_NHI_re_dc |>
     percent_max_ac_nhi_3 = 3,
     percent_max_ac_nhi_4 = 4,
     nhi_index = "NHI"
-  ) |> 
-  data_color(
-    columns = 3:7,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
   )
 
 NHI_rd_ac <- df_NHI_re_dc |> 
@@ -443,7 +529,9 @@ NHI_rd_ac <- df_NHI_re_dc |>
 NHI_rd_tc_per <- df_NHI_re_dc |> 
   select(location, nhi_index, percent_max_tc_nhi_0:percent_max_tc_nhi_4) |> 
   gt() |> 
-  fmt_percent() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
   tab_header(
     title = md("**Max NHI in Transvere Colon vs Rectum and Descending Colon**")
   ) |> 
@@ -458,12 +546,12 @@ NHI_rd_tc_per <- df_NHI_re_dc |>
     percent_max_tc_nhi_3 = 3,
     percent_max_tc_nhi_4 = 4,
     nhi_index = "NHI"
-  ) |> 
-  data_color(
-    columns = 3:7,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
   )
 
 NHI_rd_tc <- df_NHI_re_dc |> 
@@ -519,14 +607,14 @@ NHI_rd_at_per <- df_NHI_re_dc |>
     max_tc_nhi_4_f = 4,
     nhi_index = "Max NHI"
   ) |> 
-  data_color(
-    columns = 13:22,
-    direction = "column",
-    target_columns = 3:12,
-    method = "numeric",
-    palette = c("blue", "red"),
-    domain = c(0,1)
-  ) |> 
+#  data_color(
+#    columns = 13:22,
+#    direction = "column",
+#    target_columns = 3:12,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+#  ) |> 
   cols_hide(starts_with("percent"))
 ```
 
@@ -534,6 +622,7 @@ NHI_rd_at_per <- df_NHI_re_dc |>
 NHI_rd_at_per
 ```
 
+```{r, echo=FALSE}
 NHI_rd_at_per |> 
-  gtsave(filename = "rd_vs_at.png")
-
+  gtsave(filename = "output_tables/nhi_rd_at.png")
+```
