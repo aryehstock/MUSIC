@@ -23,6 +23,17 @@ fname <- "FNIH prospective study database excluding follow-up exams.xlsx"
 
 ```{r}
 q1 <- xlsx::read.xlsx2(file = fname, 2, startRow = 3, endRow = 169)
+
+q1 <- q1 |> 
+  select(MES_Rectum, contains("NHI_max")) |> 
+  mutate(
+    across(contains("NHI_max"), as.integer)
+  ) |> 
+  mutate(
+    across(contains("MES_Rectum"), as.integer) 
+  ) |> 
+  drop_na()
+
 datatable(q1)
 ```
 

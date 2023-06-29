@@ -22,108 +22,96 @@ fname <- "FNIH prospective study database excluding follow-up exams.xlsx"
 ```
 
 ```{r}
-q1 <- xlsx::read.xlsx2(file = fname, 2, startRow = 3, endRow = 169)
+q1 <- xlsx::read.xlsx2(file = fname, startRow = 3, sheetName = "Worksheet (2)")
+
+
+q1 <- q1 |> 
+  select(MES_Rectum, contains("RHI_max")) |> 
+  mutate(
+    across(contains("RHI_max"), as.integer)
+  ) |> 
+  mutate(
+    across(contains("MES_Rectum"), as.integer) 
+  ) |> 
+  drop_na()
+  
+
 datatable(q1)
 ```
 
 # MES in Rectum vs Max NHI
 
 ```{r}
-df_MES <- read.xlsx2(fname, sheetName = "MES_vs_NHI")
-df_MES_re <- df_MES |> 
-  rename_with(~ gsub("nhi", "rhi", .x)) |> 
+df_MES <- read.xlsx2(fname, sheetName = "MES_vs_RHI")
+df_MES_re <- df_MES |>
   mutate(
-    across(3:42, as.integer)
+    across(3:26, as.integer)
   ) 
 ```
 
-select cases where MES_Rectum == 0 vs max NHI in AC
+select cases where MES_Rectum == 0 vs max RHI in AC
 
 ```{r}
-df_MES_re[1,3] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_AC == 0))
-df_MES_re[1,4] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_AC == 1))
-df_MES_re[1,5] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_AC == 2))
-df_MES_re[1,6] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_AC == 3))
-df_MES_re[1,7] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_AC == 4))
+df_MES_re[1,3] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_AC <= 3))
+df_MES_re[1,4] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_AC > 3) & (q1$RHI_max_AC <= 9))
+df_MES_re[1,5] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_AC > 9))
 
-df_MES_re[2,3] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_AC == 0))
-df_MES_re[2,4] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_AC == 1))
-df_MES_re[2,5] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_AC == 2))
-df_MES_re[2,6] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_AC == 3))
-df_MES_re[2,7] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_AC == 4))
+df_MES_re[2,3] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_AC <= 3))
+df_MES_re[2,4] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_AC >3) & (q1$RHI_max_AC <= 9))
+df_MES_re[2,5] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_AC > 9))
 
-df_MES_re[3,3] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_AC == 0))
-df_MES_re[3,4] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_AC == 1))
-df_MES_re[3,5] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_AC == 2))
-df_MES_re[3,6] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_AC == 3))
-df_MES_re[3,7] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_AC == 4))
+df_MES_re[3,3] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_AC <= 3))
+df_MES_re[3,4] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_AC >3) & (q1$RHI_max_AC <= 9))
+df_MES_re[3,5] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_AC > 9))
 ```
 
 
-select cases where MES_Rectum == 0 vs max NHI in TC
+select cases where MES_Rectum == 0 vs max RHI in TC
 
 ```{r}
-df_MES_re[1,8] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_TC == 0))
-df_MES_re[1,9] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_TC == 1))
-df_MES_re[1,10] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_TC == 2))
-df_MES_re[1,11] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_TC == 3))
-df_MES_re[1,12] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_TC == 4))
+df_MES_re[1,6] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_TC <= 3))
+df_MES_re[1,7] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_TC > 3) & (q1$RHI_max_TC <= 9))
+df_MES_re[1,8] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_TC > 9))
 
-df_MES_re[2,8] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_TC == 0))
-df_MES_re[2,9] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_TC == 1))
-df_MES_re[2,10] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_TC == 2))
-df_MES_re[2,11] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_TC == 3))
-df_MES_re[2,12] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_TC == 4))
+df_MES_re[2,6] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_TC <= 3))
+df_MES_re[2,7] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_TC > 3) & (q1$RHI_max_TC <= 9))
+df_MES_re[2,8] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_TC > 9))
 
-df_MES_re[3,8] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_TC == 0))
-df_MES_re[3,9] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_TC == 1))
-df_MES_re[3,10] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_TC == 2))
-df_MES_re[3,11] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_TC == 3))
-df_MES_re[3,12] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_TC == 4))
+df_MES_re[3,6] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_TC <= 3))
+df_MES_re[3,7] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_TC > 3) & (q1$RHI_max_TC <= 9))
+df_MES_re[3,8] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_TC > 9))
 ```
 
-select cases where MES_Rectum == 0 vs max NHI in DC
+select cases where MES_Rectum == 0 vs max RHI in DC
 
 ```{r}
-df_MES_re[1,13] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_DC == 0))
-df_MES_re[1,14] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_DC == 1))
-df_MES_re[1,15] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_DC == 2))
-df_MES_re[1,16] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_DC == 3))
-df_MES_re[1,17] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_DC == 4))
+df_MES_re[1,9] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_DC <= 3))
+df_MES_re[1,10] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_DC > 3) & (q1$RHI_max_DC <= 9))
+df_MES_re[1,11] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_DC > 9))
 
-df_MES_re[2,13] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_DC == 0))
-df_MES_re[2,14] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_DC == 1))
-df_MES_re[2,15] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_DC == 2))
-df_MES_re[2,16] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_DC == 3))
-df_MES_re[2,17] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_DC == 4))
+df_MES_re[2,9] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_DC <= 3))
+df_MES_re[2,10] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_DC > 3) & (q1$RHI_max_DC <= 9))
+df_MES_re[2,11] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_DC > 9))
 
-df_MES_re[3,13] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_DC == 0))
-df_MES_re[3,14] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_DC == 1))
-df_MES_re[3,15] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_DC == 2))
-df_MES_re[3,16] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_DC == 3))
-df_MES_re[3,17] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_DC == 4))
+df_MES_re[3,9] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_DC <= 3))
+df_MES_re[3,10] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_DC > 3) & (q1$RHI_max_DC <= 9))
+df_MES_re[3,11] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_DC > 9))
 ```
 
-select cases where MES_Rectum == 0 vs max NHI in RE
+select cases where MES_Rectum == 0 vs max RHI in RE
 
 ```{r}
-df_MES_re[1,18] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_RE == 0))
-df_MES_re[1,19] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_RE == 1))
-df_MES_re[1,20] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_RE == 2))
-df_MES_re[1,21] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_RE == 3))
-df_MES_re[1,22] <- sum((q1$MES_Rectum == 0) & (q1$NHI_max_RE == 4))
+df_MES_re[1,12] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_RE <= 3))
+df_MES_re[1,13] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_RE > 3) & (q1$RHI_max_RE <= 9))
+df_MES_re[1,14] <- sum((q1$MES_Rectum == 0) & (q1$RHI_max_RE > 9))
 
-df_MES_re[2,18] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_RE == 0))
-df_MES_re[2,19] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_RE == 1))
-df_MES_re[2,20] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_RE == 2))
-df_MES_re[2,21] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_RE == 3))
-df_MES_re[2,22] <- sum((q1$MES_Rectum == 1) & (q1$NHI_max_RE == 4))
+df_MES_re[2,12] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_RE <= 3))
+df_MES_re[2,13] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_RE > 3) & (q1$RHI_max_RE <= 9))
+df_MES_re[2,14] <- sum((q1$MES_Rectum == 1) & (q1$RHI_max_RE > 9))
 
-df_MES_re[3,18] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_RE == 0))
-df_MES_re[3,19] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_RE == 1))
-df_MES_re[3,20] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_RE == 2))
-df_MES_re[3,21] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_RE == 3))
-df_MES_re[3,22] <- sum((q1$MES_Rectum > 1) & (q1$NHI_max_RE == 4))
+df_MES_re[3,12] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_RE <= 3))
+df_MES_re[3,13] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_RE > 3) & (q1$RHI_max_RE <= 9))
+df_MES_re[3,14] <- sum((q1$MES_Rectum > 1) & (q1$RHI_max_RE > 9))
 ```
 
 calculate percentages
@@ -131,91 +119,73 @@ calculate percentages
 ```{r}
 df_MES_re <- df_MES_re |> 
   rowwise() |> 
-  mutate(percent_max_ac_nhi_0 = max_ac_nhi_0 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
-  mutate(percent_max_ac_nhi_1 = max_ac_nhi_1 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
-  mutate(percent_max_ac_nhi_2 = max_ac_nhi_2 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
-  mutate(percent_max_ac_nhi_3 = max_ac_nhi_3 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4)) |> 
-  mutate(percent_max_ac_nhi_4 = max_ac_nhi_4 / sum(max_ac_nhi_0, max_ac_nhi_1, max_ac_nhi_2, max_ac_nhi_3, max_ac_nhi_4))
+  mutate(percent_max_ac_rhi..3 = max_ac_rhi..3 / sum(max_ac_rhi..3, max_ac_rhi..9, max_ac_rhi.9)) |> 
+  mutate(percent_max_ac_rhi..9 = max_ac_rhi..9 / sum(max_ac_rhi..3, max_ac_rhi..9, max_ac_rhi.9)) |> 
+  mutate(percent_max_ac_rhi.9 = max_ac_rhi.9 / sum(max_ac_rhi..3, max_ac_rhi..9, max_ac_rhi.9))
 ```
 
 ```{r}
 df_MES_re <- df_MES_re |> 
   rowwise() |> 
-  mutate(percent_max_tc_nhi_0 = max_tc_nhi_0 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
-  mutate(percent_max_tc_nhi_1 = max_tc_nhi_1 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
-  mutate(percent_max_tc_nhi_2 = max_tc_nhi_2 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
-  mutate(percent_max_tc_nhi_3 = max_tc_nhi_3 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4)) |> 
-  mutate(percent_max_tc_nhi_4 = max_tc_nhi_4 / sum(max_tc_nhi_0, max_tc_nhi_1, max_tc_nhi_2, max_tc_nhi_3, max_tc_nhi_4))
+  mutate(percent_max_tc_rhi..3 = max_tc_rhi..3 / sum(max_tc_rhi..3, max_tc_rhi..9, max_tc_rhi.9)) |> 
+  mutate(percent_max_tc_rhi..9 = max_tc_rhi..9 / sum(max_tc_rhi..3, max_tc_rhi..9, max_tc_rhi.9)) |> 
+  mutate(percent_max_tc_rhi.9 = max_tc_rhi.9 / sum(max_tc_rhi..3, max_tc_rhi..9, max_tc_rhi.9))
 ```
 
 ```{r}
 df_MES_re <- df_MES_re |> 
   rowwise() |> 
-  mutate(percent_max_dc_nhi_0 = max_dc_nhi_0 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
-  mutate(percent_max_dc_nhi_1 = max_dc_nhi_1 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
-  mutate(percent_max_dc_nhi_2 = max_dc_nhi_2 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
-  mutate(percent_max_dc_nhi_3 = max_dc_nhi_3 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4)) |> 
-  mutate(percent_max_dc_nhi_4 = max_dc_nhi_4 / sum(max_dc_nhi_0, max_dc_nhi_1, max_dc_nhi_2, max_dc_nhi_3, max_dc_nhi_4))
+  mutate(percent_max_dc_rhi..3 = max_dc_rhi..3 / sum(max_dc_rhi..3, max_dc_rhi..9, max_dc_rhi.9)) |> 
+  mutate(percent_max_dc_rhi..9 = max_dc_rhi..9 / sum(max_dc_rhi..3, max_dc_rhi..9, max_dc_rhi.9)) |> 
+  mutate(percent_max_dc_rhi.9 = max_dc_rhi.9 / sum(max_dc_rhi..3, max_dc_rhi..9, max_dc_rhi.9))
 ```
 
 ```{r}
 df_MES_re <- df_MES_re |> 
   rowwise() |> 
-  mutate(percent_max_re_nhi_0 = max_re_nhi_0 / sum(max_re_nhi_0, max_re_nhi_1, max_re_nhi_2, max_re_nhi_3, max_re_nhi_4)) |> 
-  mutate(percent_max_re_nhi_1 = max_re_nhi_1 / sum(max_re_nhi_0, max_re_nhi_1, max_re_nhi_2, max_re_nhi_3, max_re_nhi_4)) |> 
-  mutate(percent_max_re_nhi_2 = max_re_nhi_2 / sum(max_re_nhi_0, max_re_nhi_1, max_re_nhi_2, max_re_nhi_3, max_re_nhi_4)) |> 
-  mutate(percent_max_re_nhi_3 = max_re_nhi_3 / sum(max_re_nhi_0, max_re_nhi_1, max_re_nhi_2, max_re_nhi_3, max_re_nhi_4)) |> 
-  mutate(percent_max_re_nhi_4 = max_re_nhi_4 / sum(max_re_nhi_0, max_re_nhi_1, max_re_nhi_2, max_re_nhi_3, max_re_nhi_4))
+  mutate(percent_max_re_rhi..3 = max_re_rhi..3 / sum(max_re_rhi..3, max_re_rhi..9, max_re_rhi.9)) |> 
+  mutate(percent_max_re_rhi..9 = max_re_rhi..9 / sum(max_re_rhi..3, max_re_rhi..9, max_re_rhi.9)) |> 
+  mutate(percent_max_re_rhi.9 = max_re_rhi.9 / sum(max_re_rhi..3, max_re_rhi..9, max_re_rhi.9))
 ```
 
 Format values as xx.x% (n)
 
 ```{r}
 df_MES_re <- df_MES_re |> 
-  mutate(max_ac_nhi_0_f = paste0(format(round(percent_max_ac_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_0, ")")) |> 
-  mutate(max_ac_nhi_1_f = paste0(format(round(percent_max_ac_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_1, ")")) |> 
-  mutate(max_ac_nhi_2_f = paste0(format(round(percent_max_ac_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_2, ")")) |> 
-  mutate(max_ac_nhi_3_f = paste0(format(round(percent_max_ac_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_3, ")")) |> 
-  mutate(max_ac_nhi_4_f = paste0(format(round(percent_max_ac_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_ac_nhi_4, ")")) |> 
-  mutate(max_tc_nhi_0_f = paste0(format(round(percent_max_tc_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_0, ")")) |> 
-  mutate(max_tc_nhi_1_f = paste0(format(round(percent_max_tc_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_1, ")")) |> 
-  mutate(max_tc_nhi_2_f = paste0(format(round(percent_max_tc_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_2, ")")) |> 
-  mutate(max_tc_nhi_3_f = paste0(format(round(percent_max_tc_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_3, ")")) |> 
-  mutate(max_tc_nhi_4_f = paste0(format(round(percent_max_tc_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_tc_nhi_4, ")")) |> 
-  mutate(max_dc_nhi_0_f = paste0(format(round(percent_max_dc_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_0, ")")) |> 
-  mutate(max_dc_nhi_1_f = paste0(format(round(percent_max_dc_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_1, ")")) |> 
-  mutate(max_dc_nhi_2_f = paste0(format(round(percent_max_dc_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_2, ")")) |> 
-  mutate(max_dc_nhi_3_f = paste0(format(round(percent_max_dc_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_3, ")")) |> 
-  mutate(max_dc_nhi_4_f = paste0(format(round(percent_max_dc_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_dc_nhi_4, ")")) |> 
-  mutate(max_re_nhi_0_f = paste0(format(round(percent_max_re_nhi_0 * 100, 1), nsmall = 1), "%\n(", max_re_nhi_0, ")")) |> 
-  mutate(max_re_nhi_1_f = paste0(format(round(percent_max_re_nhi_1 * 100, 1), nsmall = 1), "%\n(", max_re_nhi_1, ")")) |> 
-  mutate(max_re_nhi_2_f = paste0(format(round(percent_max_re_nhi_2 * 100, 1), nsmall = 1), "%\n(", max_re_nhi_2, ")")) |> 
-  mutate(max_re_nhi_3_f = paste0(format(round(percent_max_re_nhi_3 * 100, 1), nsmall = 1), "%\n(", max_re_nhi_3, ")")) |> 
-  mutate(max_re_nhi_4_f = paste0(format(round(percent_max_re_nhi_4 * 100, 1), nsmall = 1), "%\n(", max_re_nhi_4, ")"))
+  mutate(max_ac_rhi..3_f = paste0(format(round(percent_max_ac_rhi..3 * 100, 1), nsmall = 1), "%\n(", max_ac_rhi..3, ")")) |> 
+  mutate(max_ac_rhi..9_f = paste0(format(round(percent_max_ac_rhi..9 * 100, 1), nsmall = 1), "%\n(", max_ac_rhi..9, ")")) |> 
+  mutate(max_ac_rhi.9_f = paste0(format(round(percent_max_ac_rhi.9 * 100, 1), nsmall = 1), "%\n(", max_ac_rhi.9, ")")) |> 
+  mutate(max_tc_rhi..3_f = paste0(format(round(percent_max_tc_rhi..3 * 100, 1), nsmall = 1), "%\n(", max_tc_rhi..3, ")")) |> 
+  mutate(max_tc_rhi..9_f = paste0(format(round(percent_max_tc_rhi..9 * 100, 1), nsmall = 1), "%\n(", max_tc_rhi..9, ")")) |> 
+  mutate(max_tc_rhi.9_f = paste0(format(round(percent_max_tc_rhi.9 * 100, 1), nsmall = 1), "%\n(", max_tc_rhi.9, ")")) |> 
+  mutate(max_dc_rhi..3_f = paste0(format(round(percent_max_dc_rhi..3 * 100, 1), nsmall = 1), "%\n(", max_dc_rhi..3, ")")) |> 
+  mutate(max_dc_rhi..9_f = paste0(format(round(percent_max_dc_rhi..9 * 100, 1), nsmall = 1), "%\n(", max_dc_rhi..9, ")")) |> 
+  mutate(max_dc_rhi.9_f = paste0(format(round(percent_max_dc_rhi.9 * 100, 1), nsmall = 1), "%\n(", max_dc_rhi.9, ")")) |> 
+  mutate(max_re_rhi..3_f = paste0(format(round(percent_max_re_rhi..3 * 100, 1), nsmall = 1), "%\n(", max_re_rhi..3, ")")) |> 
+  mutate(max_re_rhi..9_f = paste0(format(round(percent_max_re_rhi..9 * 100, 1), nsmall = 1), "%\n(", max_re_rhi..9, ")")) |> 
+  mutate(max_re_rhi.9_f = paste0(format(round(percent_max_re_rhi.9 * 100, 1), nsmall = 1), "%\n(", max_re_rhi.9, ")"))
 ```
 
-## MES rectum vs NHI AC
+## MES rectum vs RHI AC
 
 ```{r}
-MES_r_NHI_a <- df_MES_re |> 
-  select(location, mes_index, max_ac_nhi_0_f:max_ac_nhi_4_f) |> 
+MES_r_RHI_a <- df_MES_re |> 
+  select(location, mes_index, max_ac_rhi..3_f:max_ac_rhi.9_f) |> 
   gt() |> 
   fmt_percent(
     decimals = 1
   ) |> 
   tab_header(
-    title = md("**Max NHI in Ascending Colon vs MES in Rectum**")
+    title = md("**Max RHI in Ascending Colon vs MES in Rectum**")
   ) |> 
   tab_spanner(
-    label = "Max NHI in Ascending Colon",
+    label = "Max RHI in Ascending Colon",
     columns = starts_with("max_ac")
   ) |> 
   cols_label(
-    max_ac_nhi_0_f = 0,
-    max_ac_nhi_1_f = 1,
-    max_ac_nhi_2_f = 2,
-    max_ac_nhi_3_f = 3,
-    max_ac_nhi_4_f = 4,
+    max_ac_rhi..3_f = c("\u2264 3"),
+    max_ac_rhi..9_f = c("\u2264 9"),
+    max_ac_rhi.9_f = "> 9",
     mes_index = "MES"
 #  ) |> 
 #  data_color(
@@ -225,31 +195,29 @@ MES_r_NHI_a <- df_MES_re |>
 #    domain = c(0,1)
   )
 
-MES_r_NHI_a
+MES_r_RHI_a
 ```
 
-## MES rectum vs NHI TC
+## MES rectum vs RHI TC
 
 ```{r}
-MES_r_NHI_t <- df_MES_re |> 
-  select(location, mes_index, max_tc_nhi_0_f:max_tc_nhi_4_f) |> 
+MES_r_RHI_t <- df_MES_re |> 
+  select(location, mes_index, max_tc_rhi..3_f:max_tc_rhi.9_f) |> 
   gt() |> 
   fmt_percent(
     decimals = 1
   ) |> 
   tab_header(
-    title = md("**Max NHI in Transverse Colon vs MES in Rectum**")
+    title = md("**Max RHI in Transverse Colon vs MES in Rectum**")
   ) |> 
   tab_spanner(
-    label = "Max NHI in Transverse Colon",
+    label = "Max RHI in Transverse Colon",
     columns = starts_with("max_tc")
   ) |> 
   cols_label(
-    max_tc_nhi_0_f = 0,
-    max_tc_nhi_1_f = 1,
-    max_tc_nhi_2_f = 2,
-    max_tc_nhi_3_f = 3,
-    max_tc_nhi_4_f = 4,
+    max_tc_rhi..3_f = c("\u2264 3"),
+    max_tc_rhi..9_f = c("\u2264 9"),
+    max_tc_rhi.9_f = "> 9",
     mes_index = "MES"
 #  ) |> 
 #  data_color(
@@ -259,31 +227,29 @@ MES_r_NHI_t <- df_MES_re |>
 #    domain = c(0,1)
   )
 
-MES_r_NHI_t
+MES_r_RHI_t
 ```
 
-## MES rectum vs NHI DC
+## MES rectum vs RHI DC
 
 ```{r}
-MES_r_NHI_d <- df_MES_re |> 
-  select(location, mes_index, max_dc_nhi_0_f:max_dc_nhi_4_f) |> 
+MES_r_RHI_d <- df_MES_re |> 
+  select(location, mes_index, max_dc_rhi..3_f:max_dc_rhi.9_f) |> 
   gt() |> 
   fmt_percent(
     decimals = 1
   ) |> 
   tab_header(
-    title = md("**Max NHI in Descending Colon vs MES in Rectum**")
+    title = md("**Max RHI in Descending Colon vs MES in Rectum**")
   ) |> 
   tab_spanner(
-    label = "Max NHI in Descending Colon",
+    label = "Max RHI in Descending Colon",
     columns = starts_with("max_dc")
   ) |> 
   cols_label(
-    max_dc_nhi_0_f = 0,
-    max_dc_nhi_1_f = 1,
-    max_dc_nhi_2_f = 2,
-    max_dc_nhi_3_f = 3,
-    max_dc_nhi_4_f = 4,
+    max_dc_rhi..3_f = c("\u2264 3"),
+    max_dc_rhi..9_f = c("\u2264 9"),
+    max_dc_rhi.9_f = "> 9",
     mes_index = "MES"
 #  ) |> 
 #  data_color(
@@ -293,31 +259,29 @@ MES_r_NHI_d <- df_MES_re |>
 #    domain = c(0,1)
   )
 
-MES_r_NHI_d
+MES_r_RHI_d
 ```
 
-## MES rectum vs NHI RE
+## MES rectum vs RHI RE
 
 ```{r}
-MES_r_NHI_r <- df_MES_re |> 
-  select(location, mes_index, max_re_nhi_0_f:max_re_nhi_4_f) |> 
+MES_r_RHI_r <- df_MES_re |> 
+  select(location, mes_index, max_re_rhi..3_f:max_re_rhi.9_f) |> 
   gt() |> 
   fmt_percent(
     decimals = 1
   ) |> 
   tab_header(
-    title = md("**Max NHI in Rectum Colon vs MES in Rectum**")
+    title = md("**Max RHI in Rectum Colon vs MES in Rectum**")
   ) |> 
   tab_spanner(
-    label = "Max NHI in Rectum Colon",
+    label = "Max RHI in Rectum Colon",
     columns = starts_with("max_re")
   ) |> 
   cols_label(
-    max_re_nhi_0_f = 0,
-    max_re_nhi_1_f = 1,
-    max_re_nhi_2_f = 2,
-    max_re_nhi_3_f = 3,
-    max_re_nhi_4_f = 4,
+    max_re_rhi..3_f = c("\u2264 3"),
+    max_re_rhi..9_f = c("\u2264 9"),
+    max_re_rhi.9_f = "> 9",
     mes_index = "MES"
 #  ) |> 
 #  data_color(
@@ -327,19 +291,24 @@ MES_r_NHI_r <- df_MES_re |>
 #    domain = c(0,1)
   )
 
-MES_r_NHI_r
+MES_r_RHI_r
 ```
 
+```{r}
+q1 |> select(contains("RHI_max"))
+```
+
+
 ```{r, eval= FALSE}
-MES_r_NHI_a |> 
-  gtsave(filename = "output_tables/mes_r_nhi_a.png")
+MES_r_RHI_a |> 
+  gtsave(filename = "output_tables/mes_r_rhi_a.png")
 
-MES_r_NHI_t |> 
-  gtsave(filename = "output_tables/mes_r_nhi_t.png")
+MES_r_RHI_t |> 
+  gtsave(filename = "output_tables/mes_r_rhi_t.png")
 
-MES_r_NHI_d |> 
-  gtsave(filename = "output_tables/mes_r_nhi_d.png")
+MES_r_RHI_d |> 
+  gtsave(filename = "output_tables/mes_r_rhi_d.png")
 
-MES_r_NHI_r |> 
-  gtsave(filename = "output_tables/mes_r_nhi_r.png")
+MES_r_RHI_r |> 
+  gtsave(filename = "output_tables/mes_r_rhi_r.png")
 ```
