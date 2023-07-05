@@ -353,3 +353,18 @@ MES_r_NHI_d |>
 MES_r_NHI_r |> 
   gtsave(filename = "output_tables/mes_r_nhi_r.png")
 ```
+
+```{r, eval= FALSE}
+MES_r_NHI_a |> 
+  gtsave(filename = "output_tables/mes_r_nhi_a.html")
+
+MES_r_NHI_t |> 
+  gtsave(filename = "output_tables/mes_r_nhi_t.html")
+
+MES_r_NHI_d |> 
+  gtsave(filename = "output_tables/mes_r_nhi_d.html")
+
+MES_r_NHI_r |> 
+  gtsave(filename = "output_tables/mes_r_nhi_r.html")
+```
+

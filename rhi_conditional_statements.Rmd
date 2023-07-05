@@ -312,3 +312,17 @@ MES_r_RHI_d |>
 MES_r_RHI_r |> 
   gtsave(filename = "output_tables/mes_r_rhi_r.png")
 ```
+
+```{r, eval= FALSE}
+MES_r_RHI_a |> 
+  gtsave(filename = "output_tables/mes_r_rhi_a.docx")
+
+MES_r_RHI_t |> 
+  gtsave(filename = "output_tables/mes_r_rhi_t.docx")
+
+MES_r_RHI_d |> 
+  gtsave(filename = "output_tables/mes_r_rhi_d.docx")
+
+MES_r_RHI_r |> 
+  gtsave(filename = "output_tables/mes_r_rhi_r.docx")
+```
