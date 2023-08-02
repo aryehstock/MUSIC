@@ -635,3 +635,9 @@ NHI_rd_at_per |>
 NHI_rd_at_per |> 
   gtsave(filename = "output_tables/nhi_rd_at.docx")
 ```
+
+```{r, eval = FALSE}
+NHI_rd_tc_per |> 
+  gtsave(filename = "output_tables/nhi_rd_t_per.docx")
+```
+

@@ -297,6 +297,118 @@ MES_r_RHI_r
 ```{r}
 q1 |> select(contains("RHI_max"))
 ```
+#tables with percentages only
+```{r}
+MES_r_RHI_a_p <- df_MES_re |> 
+  select(location, mes_index, percent_max_ac_rhi..3:percent_max_ac_rhi.9) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**Max RHI in Ascending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max RHI in Ascending Colon",
+    columns = starts_with("percent_max_ac")
+  ) |> 
+  cols_label(
+    percent_max_ac_rhi..3 = c("\u2264 3"),
+    percent_max_ac_rhi..9 = c("\u2264 9"),
+    percent_max_ac_rhi.9 = "> 9",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_RHI_t_p <- df_MES_re |> 
+  select(location, mes_index, percent_max_tc_rhi..3:percent_max_tc_rhi.9) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**Max RHI in Transverse Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max RHI in Transverse Colon",
+    columns = starts_with("percent_max_tc")
+  ) |> 
+  cols_label(
+    percent_max_tc_rhi..3 = c("\u2264 3"),
+    percent_max_tc_rhi..9 = c("\u2264 9"),
+    percent_max_tc_rhi.9 = "> 9",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_RHI_d_p <- df_MES_re |> 
+  select(location, mes_index, percent_max_dc_rhi..3:percent_max_dc_rhi.9) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**Max RHI in Descending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max RHI in Descending Colon",
+    columns = starts_with("percent_max_dc")
+  ) |> 
+  cols_label(
+    percent_max_dc_rhi..3 = c("\u2264 3"),
+    percent_max_dc_rhi..9 = c("\u2264 9"),
+    percent_max_dc_rhi.9 = "> 9",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_RHI_r_p <- df_MES_re |> 
+  select(location, mes_index, percent_max_re_rhi..3:percent_max_re_rhi.9) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**Max RHI in Rectum Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max RHI in Rectum Colon",
+    columns = starts_with("percent_max_re")
+  ) |> 
+  cols_label(
+    percent_max_re_rhi..3 = c("\u2264 3"),
+    percent_max_re_rhi..9 = c("\u2264 9"),
+    percent_max_re_rhi.9 = "> 9",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_RHI_a_p
+MES_r_RHI_t_p
+MES_r_RHI_d_p
+MES_r_RHI_r_p
+```
+
 
 
 ```{r, eval= FALSE}
@@ -326,3 +438,15 @@ MES_r_RHI_d |>
 MES_r_RHI_r |> 
   gtsave(filename = "output_tables/mes_r_rhi_r.docx")
 ```
+
+```{r}
+MES_r_RHI_a_p |> 
+  gtsave(filename = "output_tables/mes_r_rhi_a_p.docx")
+MES_r_RHI_t_p |> 
+  gtsave(filename = "output_tables/mes_r_rhi_t_p.docx")
+MES_r_RHI_d_p |> 
+  gtsave(filename = "output_tables/mes_r_rhi_d_p.docx")
+MES_r_RHI_r_p |> 
+  gtsave(filename = "output_tables/mes_r_rhi_r_p.docx")
+```
+
