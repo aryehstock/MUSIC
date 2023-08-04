@@ -321,6 +321,20 @@ NHI_rec_dc_per |>
 NHI_rec_ac_per
 NHI_rec_tc_per
 NHI_rec_dc_per
+NHI_rec_ac
+NHI_rec_tc
+NHI_rec_dc
+```
+
+```{r, eval= FALSE}
+NHI_rec_ac |> 
+  gtsave(filename = "output_tables/nhi_r_a.docx")
+
+NHI_rec_tc |> 
+  gtsave(filename = "output_tables/nhi_r_t.docx")
+
+NHI_rec_dc |> 
+  gtsave(filename = "output_tables/nhi_r_d.docx")
 ```
 
 ```{r}
@@ -581,6 +595,16 @@ NHI_rd_tc <- df_NHI_re_dc |>
 ```{r}
 NHI_rd_ac_per
 NHI_rd_tc_per
+NHI_rd_ac
+NHI_rd_tc
+```
+
+```{r, eval = FALSE}
+NHI_rd_ac |> 
+  gtsave(filename = "output_tables/nhi_rd_ac.docx")
+
+NHI_rd_tc |> 
+  gtsave(filename = "output_tables/nhi_rd_tc.docx")
 ```
 
 ```{r}
@@ -640,4 +664,3 @@ NHI_rd_at_per |>
 NHI_rd_tc_per |> 
   gtsave(filename = "output_tables/nhi_rd_t_per.docx")
 ```
-

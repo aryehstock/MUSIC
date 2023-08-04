@@ -188,7 +188,7 @@ MES_NHI_rd_t_per <- df_MES_NHI_rd |>
     decimals = 1
   ) |> 
   tab_header(
-    title = md("**Max NHI in Transvere Colon vs Rectum and Descending Colon**")
+    title = md("**Max NHI in Transvere Colon vs MES in Rectum and Descending Colon**")
   ) |> 
   tab_spanner(
     label = "Max NHI in Transverse Colon",
@@ -235,6 +235,15 @@ MES_NHI_rd_a_per
 MES_NHI_rd_t
 MES_NHI_rd_t_per
 ```
+
+```{r, eval = FALSE}
+MES_NHI_rd_a |> 
+  gtsave(filename = "output_tables/mes_nhi_rd_a.docx")
+
+MES_NHI_rd_t |> 
+  gtsave(filename = "output_tables/mes_nhi_rd_t.docx")
+```
+
 #Separate tables
 ```{r}
 MES_NHI_rd_a_f <- df_MES_NHI_rd |> 

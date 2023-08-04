@@ -1,0 +1,399 @@
+---
+title: "MES vs MES"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r setup}
+library(tidyverse)
+library(xlsx)
+library(DT)
+library(gt)
+library(webshot2)
+```
+
+# Import data from study database .xlsx file
+
+```{r, import xlsx file}
+fname <- "FNIH prospective study database excluding follow-up exams.xlsx"
+```
+
+```{r}
+q1 <- xlsx::read.xlsx2(file = fname, startRow = 3, sheetName = "Worksheet (2)")
+
+
+q1 <- q1 |> 
+  select(contains("MES"), MUSIC_ID) |> 
+  mutate(
+    across(contains("MES"), as.integer)
+  ) |> 
+  drop_na()
+  
+q1_na <- q1 |> 
+  select(contains("MES"))
+
+datatable(q1)
+datatable(q1_na)
+```
+
+```{r}
+df_MES <- read.xlsx2(fname, sheetName = "MES_vs_MES")
+df_MES_re <- df_MES |>
+  mutate(
+    across(3:26, as.integer)
+  ) 
+```
+
+select cases where MES_Rectum == 0 vs MES in AC
+
+```{r}
+df_MES_re[1,3] <- sum((q1$MES_Rectum == 0) & (q1$MES_Ascending_Colon == 0))
+df_MES_re[1,4] <- sum((q1$MES_Rectum == 0) & (q1$MES_Ascending_Colon == 1))
+df_MES_re[1,5] <- sum((q1$MES_Rectum == 0) & (q1$MES_Ascending_Colon > 1))
+
+df_MES_re[2,3] <- sum((q1$MES_Rectum == 1) & (q1$MES_Ascending_Colon == 0))
+df_MES_re[2,4] <- sum((q1$MES_Rectum == 1) & (q1$MES_Ascending_Colon == 1))
+df_MES_re[2,5] <- sum((q1$MES_Rectum == 1) & (q1$MES_Ascending_Colon > 1))
+
+df_MES_re[3,3] <- sum((q1$MES_Rectum > 1) & (q1$MES_Ascending_Colon == 0))
+df_MES_re[3,4] <- sum((q1$MES_Rectum > 1) & (q1$MES_Ascending_Colon == 1))
+df_MES_re[3,5] <- sum((q1$MES_Rectum > 1) & (q1$MES_Ascending_Colon > 1))
+```
+
+
+select cases where MES_Rectum == 0 vs MES in TC
+
+```{r}
+df_MES_re[1,6] <- sum((q1$MES_Rectum == 0) & (q1$MES_Transverse_Colon == 0))
+df_MES_re[1,7] <- sum((q1$MES_Rectum == 0) & (q1$MES_Transverse_Colon == 1))
+df_MES_re[1,8] <- sum((q1$MES_Rectum == 0) & (q1$MES_Transverse_Colon > 1))
+
+df_MES_re[2,6] <- sum((q1$MES_Rectum == 1) & (q1$MES_Transverse_Colon == 0))
+df_MES_re[2,7] <- sum((q1$MES_Rectum == 1) & (q1$MES_Transverse_Colon == 1))
+df_MES_re[2,8] <- sum((q1$MES_Rectum == 1) & (q1$MES_Transverse_Colon > 1))
+
+df_MES_re[3,6] <- sum((q1$MES_Rectum > 1) & (q1$MES_Transverse_Colon == 0))
+df_MES_re[3,7] <- sum((q1$MES_Rectum > 1) & (q1$MES_Transverse_Colon == 1))
+df_MES_re[3,8] <- sum((q1$MES_Rectum > 1) & (q1$MES_Transverse_Colon > 1))
+```
+
+select cases where MES_Rectum == 0 vs MES in DC
+
+```{r}
+df_MES_re[1,9] <- sum((q1$MES_Rectum == 0) & (q1$MES_Descending_Colon == 0))
+df_MES_re[1,10] <- sum((q1$MES_Rectum == 0) & (q1$MES_Descending_Colon == 1))
+df_MES_re[1,11] <- sum((q1$MES_Rectum == 0) & (q1$MES_Descending_Colon > 1))
+
+df_MES_re[2,9] <- sum((q1$MES_Rectum == 1) & (q1$MES_Descending_Colon == 0))
+df_MES_re[2,10] <- sum((q1$MES_Rectum == 1) & (q1$MES_Descending_Colon == 1))
+df_MES_re[2,11] <- sum((q1$MES_Rectum == 1) & (q1$MES_Descending_Colon > 1))
+
+df_MES_re[3,9] <- sum((q1$MES_Rectum > 1) & (q1$MES_Descending_Colon == 0))
+df_MES_re[3,10] <- sum((q1$MES_Rectum > 1) & (q1$MES_Descending_Colon == 1))
+df_MES_re[3,11] <- sum((q1$MES_Rectum > 1) & (q1$MES_Descending_Colon > 1))
+```
+
+select cases where MES_Rectum == 0 vs MES in RE
+
+```{r}
+df_MES_re[1,12] <- sum((q1$MES_Rectum == 0) & (q1$MES_Rectum == 0))
+df_MES_re[1,13] <- sum((q1$MES_Rectum == 0) & (q1$MES_Rectum == 1))
+df_MES_re[1,14] <- sum((q1$MES_Rectum == 0) & (q1$MES_Rectum > 1))
+
+df_MES_re[2,12] <- sum((q1$MES_Rectum == 1) & (q1$MES_Rectum == 0))
+df_MES_re[2,13] <- sum((q1$MES_Rectum == 1) & (q1$MES_Rectum == 1))
+df_MES_re[2,14] <- sum((q1$MES_Rectum == 1) & (q1$MES_Rectum > 1))
+
+df_MES_re[3,12] <- sum((q1$MES_Rectum > 1) & (q1$MES_Rectum == 0))
+df_MES_re[3,13] <- sum((q1$MES_Rectum > 1) & (q1$MES_Rectum == 1))
+df_MES_re[3,14] <- sum((q1$MES_Rectum > 1) & (q1$MES_Rectum > 1))
+```
+
+calculate percentages
+
+```{r}
+df_MES_re <- df_MES_re |> 
+  rowwise() |> 
+  mutate(percent_ac_mes_0 = ac_mes_0 / sum(ac_mes_0, ac_mes_1, ac_mes_.1)) |> 
+  mutate(percent_ac_mes_1 = ac_mes_1 / sum(ac_mes_0, ac_mes_1, ac_mes_.1)) |> 
+  mutate(percent_ac_mes_.1 = ac_mes_.1 / sum(ac_mes_0, ac_mes_1, ac_mes_.1))
+
+df_MES_re <- df_MES_re |> 
+  rowwise() |> 
+  mutate(percent_tc_mes_0 = tc_mes_0 / sum(tc_mes_0, tc_mes_1, tc_mes_.1)) |> 
+  mutate(percent_tc_mes_1 = tc_mes_1 / sum(tc_mes_0, tc_mes_1, tc_mes_.1)) |> 
+  mutate(percent_tc_mes_.1 = tc_mes_.1 / sum(tc_mes_0, tc_mes_1, tc_mes_.1))
+
+df_MES_re <- df_MES_re |> 
+  rowwise() |> 
+  mutate(percent_dc_mes_0 = dc_mes_0 / sum(dc_mes_0, dc_mes_1, dc_mes_.1)) |> 
+  mutate(percent_dc_mes_1 = dc_mes_1 / sum(dc_mes_0, dc_mes_1, dc_mes_.1)) |> 
+  mutate(percent_dc_mes_.1 = dc_mes_.1 / sum(dc_mes_0, dc_mes_1, dc_mes_.1))
+
+df_MES_re <- df_MES_re |> 
+  rowwise() |> 
+  mutate(percent_re_mes_0 = re_mes_0 / sum(re_mes_0, re_mes_1, re_mes_.1)) |> 
+  mutate(percent_re_mes_1 = re_mes_1 / sum(re_mes_0, re_mes_1, re_mes_.1)) |> 
+  mutate(percent_re_mes_.1 = re_mes_.1 / sum(re_mes_0, re_mes_1, re_mes_.1))
+```
+
+Format values as xx.x% (n)
+
+```{r}
+df_MES_re <- df_MES_re |> 
+  mutate(ac_mes_0_f = paste0(format(round(percent_ac_mes_0 * 100, 1), nsmall = 1), "%\n(", ac_mes_0, ")")) |> 
+  mutate(ac_mes_1_f = paste0(format(round(percent_ac_mes_1 * 100, 1), nsmall = 1), "%\n(", ac_mes_1, ")")) |> 
+  mutate(ac_mes_.1_f = paste0(format(round(percent_ac_mes_.1 * 100, 1), nsmall = 1), "%\n(", ac_mes_.1, ")")) |> 
+  mutate(tc_mes_0_f = paste0(format(round(percent_tc_mes_0 * 100, 1), nsmall = 1), "%\n(", tc_mes_0, ")")) |> 
+  mutate(tc_mes_1_f = paste0(format(round(percent_tc_mes_1 * 100, 1), nsmall = 1), "%\n(", tc_mes_1, ")")) |> 
+  mutate(tc_mes_.1_f = paste0(format(round(percent_tc_mes_.1 * 100, 1), nsmall = 1), "%\n(", tc_mes_.1, ")")) |> 
+  mutate(dc_mes_0_f = paste0(format(round(percent_dc_mes_0 * 100, 1), nsmall = 1), "%\n(", dc_mes_0, ")")) |> 
+  mutate(dc_mes_1_f = paste0(format(round(percent_dc_mes_1 * 100, 1), nsmall = 1), "%\n(", dc_mes_1, ")")) |> 
+  mutate(dc_mes_.1_f = paste0(format(round(percent_dc_mes_.1 * 100, 1), nsmall = 1), "%\n(", dc_mes_.1, ")")) |> 
+  mutate(re_mes_0_f = paste0(format(round(percent_re_mes_0 * 100, 1), nsmall = 1), "%\n(", re_mes_0, ")")) |> 
+  mutate(re_mes_1_f = paste0(format(round(percent_re_mes_1 * 100, 1), nsmall = 1), "%\n(", re_mes_1, ")")) |> 
+  mutate(re_mes_.1_f = paste0(format(round(percent_re_mes_.1 * 100, 1), nsmall = 1), "%\n(", re_mes_.1, ")"))
+```
+
+## MES rectum vs MES AC
+
+```{r}
+MES_r_MES_a <- df_MES_re |> 
+  select(location, mes_index, ac_mes_0_f:ac_mes_.1_f) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**MES in Ascending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Ascending Colon",
+    columns = starts_with("ac")
+  ) |> 
+  cols_label(
+    ac_mes_0_f = c("0"),
+    ac_mes_1_f = c("1"),
+    ac_mes_.1_f = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_a
+```
+
+## MES rectum vs MES TC
+
+```{r}
+MES_r_MES_t <- df_MES_re |> 
+  select(location, mes_index, tc_mes_0_f:tc_mes_.1_f) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**MES in Transverse Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Transverse Colon",
+    columns = starts_with("tc")
+  ) |> 
+  cols_label(
+    tc_mes_0_f = c("0"),
+    tc_mes_1_f = c("1"),
+    tc_mes_.1_f = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_t
+```
+
+## MES rectum vs MES DC
+
+```{r}
+MES_r_MES_d <- df_MES_re |> 
+  select(location, mes_index, dc_mes_0_f:dc_mes_.1_f) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**MES in Descending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Descending Colon",
+    columns = starts_with("dc")
+  ) |> 
+  cols_label(
+    dc_mes_0_f = c("0"),
+    dc_mes_1_f = c("1"),
+    dc_mes_.1_f = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_d
+```
+
+## MES rectum vs MES RE
+
+```{r}
+MES_r_MES_r <- df_MES_re |> 
+  select(location, mes_index, re_mes_0_f:re_mes_.1_f) |> 
+  gt() |> 
+  fmt_percent(
+    decimals = 1
+  ) |> 
+  tab_header(
+    title = md("**MES in Rectum vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Rectum",
+    columns = starts_with("re")
+  ) |> 
+  cols_label(
+    re_mes_0_f = c("0"),
+    re_mes_1_f = c("1"),
+    re_mes_.1_f = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_r
+```
+
+#tables with N values only
+```{r}
+MES_r_MES_a_n <- df_MES_re |> 
+  select(location, mes_index, ac_mes_0:ac_mes_.1) |> 
+  gt() |> 
+  tab_header(
+    title = md("**MES in Ascending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Ascending Colon",
+    columns = starts_with("ac")
+  ) |> 
+  cols_label(
+    ac_mes_0 = c("0"),
+    ac_mes_1 = c("1"),
+    ac_mes_.1 = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_t_n <- df_MES_re |> 
+  select(location, mes_index, tc_mes_0:tc_mes_.1) |> 
+  gt() |> 
+  tab_header(
+    title = md("**MES in Transverse Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Transverse Colon",
+    columns = starts_with("tc")
+  ) |> 
+  cols_label(
+    tc_mes_0 = c("0"),
+    tc_mes_1 = c("1"),
+    tc_mes_.1 = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_d_n <- df_MES_re |> 
+  select(location, mes_index, dc_mes_0:dc_mes_.1) |> 
+  gt() |> 
+  tab_header(
+    title = md("**MES in Descending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Descending Colon",
+    columns = starts_with("dc")
+  ) |> 
+  cols_label(
+    dc_mes_0 = c("0"),
+    dc_mes_1 = c("1"),
+    dc_mes_.1 = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_r_n <- df_MES_re |> 
+  select(location, mes_index, re_mes_0:re_mes_.1) |> 
+  gt() |> 
+  tab_header(
+    title = md("**MES in Rectum vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "MES in Rectum",
+    columns = starts_with("re")
+  ) |> 
+  cols_label(
+    re_mes_0 = c("0"),
+    re_mes_1 = c("1"),
+    re_mes_.1 = "> 1",
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_MES_a_n
+MES_r_MES_t_n
+MES_r_MES_d_n
+MES_r_MES_r_n
+```
+
+#Export N values
+```{r}
+MES_r_MES_a_n |> 
+  gtsave(filename = "output_tables/mes_r_mes_a_n.docx")
+MES_r_MES_t_n |> 
+  gtsave(filename = "output_tables/mes_r_mes_t_n.docx")
+MES_r_MES_d_n |> 
+  gtsave(filename = "output_tables/mes_r_mes_d_n.docx")
+MES_r_MES_r_n |> 
+  gtsave(filename = "output_tables/mes_r_mes_r_n.docx")
+```

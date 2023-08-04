@@ -340,6 +340,118 @@ MES_r_NHI_r <- df_MES_re |>
 MES_r_NHI_r
 ```
 
+## MES rectum vs NHI AC
+
+```{r}
+MES_r_NHI_a_n <- df_MES_re |> 
+  select(location, mes_index, max_ac_nhi_0:max_ac_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Ascending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Ascending Colon",
+    columns = starts_with("max_ac")
+  ) |> 
+  cols_label(
+    max_ac_nhi_0 = 0,
+    max_ac_nhi_1 = 1,
+    max_ac_nhi_2 = 2,
+    max_ac_nhi_3 = 3,
+    max_ac_nhi_4 = 4,
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+
+MES_r_NHI_t_n <- df_MES_re |> 
+  select(location, mes_index, max_tc_nhi_0:max_tc_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Transverse Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Transverse Colon",
+    columns = starts_with("max_tc")
+  ) |> 
+  cols_label(
+    max_tc_nhi_0 = 0,
+    max_tc_nhi_1 = 1,
+    max_tc_nhi_2 = 2,
+    max_tc_nhi_3 = 3,
+    max_tc_nhi_4 = 4,
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+
+MES_r_NHI_d_n <- df_MES_re |> 
+  select(location, mes_index, max_dc_nhi_0:max_dc_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Descending Colon vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Descending Colon",
+    columns = starts_with("max_dc")
+  ) |> 
+  cols_label(
+    max_dc_nhi_0 = 0,
+    max_dc_nhi_1 = 1,
+    max_dc_nhi_2 = 2,
+    max_dc_nhi_3 = 3,
+    max_dc_nhi_4 = 4,
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+
+MES_r_NHI_r_n <- df_MES_re |> 
+  select(location, mes_index, max_re_nhi_0:max_re_nhi_4) |> 
+  gt() |> 
+  tab_header(
+    title = md("**Max NHI in Rectum vs MES in Rectum**")
+  ) |> 
+  tab_spanner(
+    label = "Max NHI in Rectum",
+    columns = starts_with("max_re")
+  ) |> 
+  cols_label(
+    max_re_nhi_0 = 0,
+    max_re_nhi_1 = 1,
+    max_re_nhi_2 = 2,
+    max_re_nhi_3 = 3,
+    max_re_nhi_4 = 4,
+    mes_index = "MES"
+#  ) |> 
+#  data_color(
+#    columns = 3:7,
+#    method = "numeric",
+#    palette = c("blue", "red"),
+#    domain = c(0,1)
+  )
+
+MES_r_NHI_r_n
+MES_r_NHI_d_n
+MES_r_NHI_t_n
+MES_r_NHI_a_n
+```
+
 #Table with only percentages
 
 ```{r}
@@ -374,7 +486,7 @@ MES_r_NHI_a_per <- df_MES_re |>
 MES_r_NHI_a_per
 ```
 
-
+#Export Percent and N values
 ```{r, eval= FALSE}
 MES_r_NHI_a |> 
   gtsave(filename = "output_tables/mes_r_nhi_a.png")
@@ -403,3 +515,17 @@ MES_r_NHI_r |>
   gtsave(filename = "output_tables/mes_r_nhi_r.html")
 ```
 
+#Export N values
+```{r, eval= FALSE}
+MES_r_NHI_a_n |> 
+  gtsave(filename = "output_tables/mes_r_nhi_a.docx")
+
+MES_r_NHI_t_n |> 
+  gtsave(filename = "output_tables/mes_r_nhi_t.docx")
+
+MES_r_NHI_d_n |> 
+  gtsave(filename = "output_tables/mes_r_nhi_d.docx")
+
+MES_r_NHI_r_n |> 
+  gtsave(filename = "output_tables/mes_r_nhi_r.docx")
+```
