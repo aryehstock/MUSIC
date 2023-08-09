@@ -392,11 +392,11 @@ df_NHI_re_dc[1,5] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_m
 df_NHI_re_dc[1,6] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_max_AC == 3))
 df_NHI_re_dc[1,7] <- sum((q1$NHI_max_RE == 0) & (q1$NHI_max_DC == 0) & (q1$NHI_max_AC == 4))
 
-df_NHI_re_dc[2,3] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 0)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_AC == 0)))
-df_NHI_re_dc[2,4] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_AC == 1)))
-df_NHI_re_dc[2,5] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 2)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_AC == 2)))
-df_NHI_re_dc[2,6] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 3)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_AC == 3)))
-df_NHI_re_dc[2,7] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 4)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_AC == 4)))
+df_NHI_re_dc[2,3] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 0) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_RE <= 1) & (q1$NHI_max_AC == 0)))
+df_NHI_re_dc[2,4] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 1) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_RE <= 1) & (q1$NHI_max_AC == 1)))
+df_NHI_re_dc[2,5] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 2) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_RE <= 1) & (q1$NHI_max_AC == 2)))
+df_NHI_re_dc[2,6] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 3) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_RE <= 1) & (q1$NHI_max_AC == 3)))
+df_NHI_re_dc[2,7] <- sum(((q1$NHI_max_RE == 1) & (q1$NHI_max_AC == 4) & (q1$NHI_max_DC <= 1)) | ((q1$NHI_max_DC == 1) & (q1$NHI_max_RE <= 1) & (q1$NHI_max_AC == 4)))
 
 df_NHI_re_dc[3,3] <- sum(((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 0)) | ((q1$NHI_max_DC > 1) & (q1$NHI_max_AC == 0)))
 df_NHI_re_dc[3,4] <- sum(((q1$NHI_max_RE > 1) & (q1$NHI_max_AC == 1)) | ((q1$NHI_max_DC > 1) & (q1$NHI_max_AC == 1)))
@@ -568,6 +568,9 @@ NHI_rd_tc <- df_NHI_re_dc |>
 ```{r}
 NHI_rd_ac_per
 NHI_rd_tc_per
+
+NHI_rd_ac
+NHI_rd_tc
 ```
 
 ```{r}
@@ -614,6 +617,9 @@ NHI_rd_at_per
 ```
 
 ```{r, echo=FALSE}
-NHI_rd_at_per |> 
-  gtsave(filename = "output_tables/nhi_rd_at.png")
+NHI_rd_ac |> 
+  gtsave(filename = "output_tables/nhi_rd_a.docx")
+
+NHI_rd_tc |> 
+  gtsave(filename = "output_tables/nhi_rd_t.docx")
 ```
