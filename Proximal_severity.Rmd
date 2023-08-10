@@ -1,0 +1,79 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r setup}
+library(tidyverse)
+library(xlsx)
+library(DT)
+library(gt)
+library(webshot2)
+```
+
+# Import data from study database .xlsx file
+
+```{r, import xlsx file}
+fname <- "FNIH prospective study database excluding follow-up exams.xlsx"
+```
+
+```{r import data}
+q1 <- xlsx::read.xlsx2(file = fname, startRow = 3, sheetName = "Worksheet (2)")
+
+
+rhi <- q1 |> 
+  select(contains("RHI_max")) |> 
+  mutate(
+    across(contains("RHI_max"), as.integer)
+  ) |> 
+  drop_na()
+
+nhi <- q1 |> 
+  select(contains("NHI_max"))
+
+mes <- q1 |> 
+  select(contains("MES"))
+
+datatable(q1)
+datatable(rhi)
+datatable(nhi)
+datatable(mes)
+```
+
+```{r max score of prox and dist}
+rhi2 <- rhi |> 
+  mutate(prox_rhi = pmax(RHI_max_AC, RHI_max_TC)) |> 
+  mutate(dist_rhi = pmax(RHI_max_DC, RHI_max_RE)) |> 
+  select(prox_rhi, dist_rhi)
+
+nhi2 <- nhi |> 
+  mutate(prox_nhi = pmax(NHI_max_AC, NHI_max_TC)) |> 
+  mutate(dist_nhi = pmax(NHI_max_DC, NHI_max_RE)) |> 
+  select(prox_nhi, dist_nhi)
+
+mes2 <- mes |> 
+  mutate(prox_mes = pmax(MES_Ascending_Colon, MES_Transverse_Colon)) |> 
+  mutate(dist_mes = pmax(MES_Descending_Colon, MES_Rectum)) |> 
+  select(prox_mes, dist_mes)
+```
+
+```{r summary}
+q2 <- data.frame(
+  condition = c("proximal exceeds distal", "distal exceed proximal", "proximal equals distal"),
+  RHI = c(sum(rhi2$prox_rhi > rhi2$dist_rhi), sum(rhi2$prox_rhi < rhi2$dist_rhi), sum(rhi2$prox_rhi == rhi2$dist_rhi)),
+  NHI = c(sum(nhi2$prox_nhi > nhi2$dist_nhi), sum(nhi2$prox_nhi < nhi2$dist_nhi), sum(nhi2$prox_nhi == nhi2$dist_nhi)),
+  MES = c(sum(mes2$prox_mes > mes2$dist_mes), sum(mes2$prox_mes < mes2$dist_mes), sum(mes2$prox_mes == mes2$dist_mes))
+  )
+
+q2
+```
+
+```{r export to excel, eval=FALSE}
+xlsx::write.xlsx2(q2, "output_tables/prox_v_dist.xlsx")
+```
+
+
